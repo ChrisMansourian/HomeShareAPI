@@ -1,0 +1,17 @@
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\HomeShareAPI.exe
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\HomeShareAPI.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\HomeShareAPI.deps.json
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\HomeShareAPI.runtimeconfig.json
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\HomeShareAPI.pdb
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\Microsoft.OpenApi.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\System.Data.SqlClient.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win-arm64\native\sni.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win-x64\native\sni.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win-x86\native\sni.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

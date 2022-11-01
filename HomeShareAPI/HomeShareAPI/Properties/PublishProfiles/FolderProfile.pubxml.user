@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\Owner\Documents\School\Fall 2022\CSCI 310\HomeShareAPI\HomeShareAPI\HomeShareAPI\HomeShareAPI\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2022-11-01T00:29:02.6737834Z;</History>
+  </PropertyGroup>
+</Project>
