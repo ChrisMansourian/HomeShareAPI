@@ -38,8 +38,50 @@ namespace HomeShareAPI.Controllers
             }
             catch
             {
-                Debug.WriteLine("failed");
+                Debug.WriteLine("failed login");
                 return null;
+            }
+        }
+
+        [HttpGet("SignUp")]
+        public bool CreateAccount(string username, string password, string dob, string email, string number,
+                                        string academicFocus, string schoolYear, string personalIntro, string img,
+                                        string personalityQuestion1, string personalityQuestion2, string personalityQuestion3)
+        {
+
+            try
+            {
+                User u = null;
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_signUp", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("username", username);
+                    command.Parameters.AddWithValue("pass", password);
+                    command.Parameters.AddWithValue("dob", DateTime.Parse(dob));
+                    command.Parameters.AddWithValue("email", email);
+                    command.Parameters.AddWithValue("number", number);
+                    command.Parameters.AddWithValue("major", academicFocus);
+                    command.Parameters.AddWithValue("yearOfGrad", schoolYear);
+                    command.Parameters.AddWithValue("personalIntro", personalIntro);
+                    byte[] imgBytes = img != null ? Convert.FromBase64String(img) : new byte[0];
+                    command.Parameters.AddWithValue("image", imgBytes != null ? imgBytes : new byte[0]);
+                    command.Parameters.AddWithValue("personalityQuestion1", personalityQuestion1);
+                    command.Parameters.AddWithValue("personalityQuestion2", personalityQuestion2);
+                    command.Parameters.AddWithValue("personalityQuestion3", personalityQuestion3);
+
+                    conn.Open();
+                    command.ExecuteNonQuery();
+
+                    return true;
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("failed sign up");
+                return false;
             }
         }
 
