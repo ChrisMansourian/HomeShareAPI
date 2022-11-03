@@ -43,9 +43,9 @@ namespace HomeShareAPI.Controllers
             }
         }
 
-        [HttpGet("SignUp")]
+        [HttpPost("SignUp")]
         public bool CreateAccount(string username, string password, string dob, string email, string number,
-                                        string academicFocus, string schoolYear, string personalIntro, string img,
+                                        string academicFocus, string schoolYear, string personalIntro, [FromBody] ImageWrapper img,
                                         string personalityQuestion1, string personalityQuestion2, string personalityQuestion3)
         {
 
@@ -66,7 +66,7 @@ namespace HomeShareAPI.Controllers
                     command.Parameters.AddWithValue("major", academicFocus);
                     command.Parameters.AddWithValue("yearOfGrad", schoolYear);
                     command.Parameters.AddWithValue("personalIntro", personalIntro);
-                    byte[] imgBytes = img != null ? Convert.FromBase64String(img) : new byte[0];
+                    byte[] imgBytes = img != null ? Convert.FromBase64String(img.img) : new byte[0];
                     command.Parameters.AddWithValue("image", imgBytes != null ? imgBytes : new byte[0]);
                     command.Parameters.AddWithValue("personalityQuestion1", personalityQuestion1);
                     command.Parameters.AddWithValue("personalityQuestion2", personalityQuestion2);
@@ -225,9 +225,9 @@ namespace HomeShareAPI.Controllers
             }
         }
 
-        [HttpGet("UpdateProfile")]
+        [HttpPost("UpdateProfile")]
         public bool UpdateProfile(string username, string dob, string email, string number,
-                                        string academicFocus, string schoolYear, string personalIntro, string img,
+                                        string academicFocus, string schoolYear, string personalIntro, [FromBody] ImageWrapper img,
                                         string personalityQuestion1, string personalityQuestion2, string personalityQuestion3)
         
         {
@@ -259,7 +259,7 @@ namespace HomeShareAPI.Controllers
                     command.Parameters.AddWithValue("major", academicFocus);
                     command.Parameters.AddWithValue("yearOfGrad", schoolYear);
                     command.Parameters.AddWithValue("personalIntro", personalIntro);
-                    byte[] imgBytes = img != null ? Convert.FromBase64String(img) : new byte[0];
+                    byte[] imgBytes = img != null ? Convert.FromBase64String(img.img) : new byte[0];
                     command.Parameters.AddWithValue("image", imgBytes != null ? imgBytes : new byte[0]);
                     command.Parameters.AddWithValue("personalityQuestion1", personalityQuestion1);
                     command.Parameters.AddWithValue("personalityQuestion2", personalityQuestion2);
