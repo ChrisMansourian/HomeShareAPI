@@ -85,6 +85,185 @@ namespace HomeShareAPI.Controllers
             }
         }
 
+        [HttpGet("GetUser")]
+        public User GetUser(int userId)
+        {
+            try
+            {
+                User u = null;
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_getUser", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("userId", userId);
+                    conn.Open();
+                    var reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        u = GetUserFromReader(reader);
+                    }
+
+                }
+                return u;
+            }
+            catch
+            {
+                Debug.WriteLine("failed getting that user");
+                return null;
+            }
+        }
+        
+        [HttpGet("GetUserByName")]
+        public User GetUser(string username)
+        {
+            try
+            {
+                User u = null;
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_getUserByName", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("username", username);
+                    conn.Open();
+                    var reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        u = GetUserFromReader(reader);
+                    }
+
+                }
+                return u;
+            }
+            catch
+            {
+                Debug.WriteLine("failed getting that user");
+                return null;
+            }
+        }
+
+        [HttpGet("ChangeUserName")]
+        public bool ChangeUserName(int userId, string username)
+        {
+
+            try
+            {
+                User u = null;
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_changeUserName", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("userId", userId);
+                    command.Parameters.AddWithValue("userName", username);
+
+                    conn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    bool result = false;
+
+                    if (reader.Read())
+                    {
+                        int res = int.Parse(reader["result"].ToString());
+                        if (res == 1)
+                        {
+                            result = true;
+                        }
+                    }
+
+                    return result;
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("failed changing the username");
+                return false;
+            }
+        }
+
+        [HttpGet("CheckUserNameExists")]
+        public bool CheckUserNameExists(string username)
+        {
+
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_checkUserNameExists", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("userName", username);
+
+                    conn.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    bool result = false;
+
+                    if (reader.Read())
+                    {
+                        int res = int.Parse(reader["result"].ToString());
+                        if (res == 1)
+                        {
+                            result = true;
+                        }
+                    }
+
+                    return result;
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("failed changing the username");
+                return false;
+            }
+        }
+
+        [HttpGet("UpdateProfile")]
+        public bool UpdateProfile(string username, string dob, string email, string number,
+                                        string academicFocus, string schoolYear, string personalIntro, string img,
+                                        string personalityQuestion1, string personalityQuestion2, string personalityQuestion3)
+        {
+
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_updateProfile", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("username", username);
+                    command.Parameters.AddWithValue("dob", DateTime.Parse(dob));
+                    command.Parameters.AddWithValue("email", email);
+                    command.Parameters.AddWithValue("number", number);
+                    command.Parameters.AddWithValue("major", academicFocus);
+                    command.Parameters.AddWithValue("yearOfGrad", schoolYear);
+                    command.Parameters.AddWithValue("personalIntro", personalIntro);
+                    byte[] imgBytes = img != null ? Convert.FromBase64String(img) : new byte[0];
+                    command.Parameters.AddWithValue("image", imgBytes != null ? imgBytes : new byte[0]);
+                    command.Parameters.AddWithValue("personalityQuestion1", personalityQuestion1);
+                    command.Parameters.AddWithValue("personalityQuestion2", personalityQuestion2);
+                    command.Parameters.AddWithValue("personalityQuestion3", personalityQuestion3);
+
+                    conn.Open();
+                    command.ExecuteNonQuery();
+
+                    return true;
+                }
+            }
+            catch
+            {
+                Debug.WriteLine("failed sign up");
+                return false;
+            }
+        }
 
         private static User GetUserFromReader(SqlDataReader reader)
         {
