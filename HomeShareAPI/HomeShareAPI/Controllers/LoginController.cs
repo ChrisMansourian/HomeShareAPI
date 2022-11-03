@@ -229,7 +229,20 @@ namespace HomeShareAPI.Controllers
         public bool UpdateProfile(string username, string dob, string email, string number,
                                         string academicFocus, string schoolYear, string personalIntro, string img,
                                         string personalityQuestion1, string personalityQuestion2, string personalityQuestion3)
+        
         {
+            if (personalityQuestion1 == null)
+            {
+                personalityQuestion1 = "";
+            }
+            if (personalityQuestion2 == null)
+            {
+                personalityQuestion2 = "";
+            }
+            if (personalityQuestion3 == null)
+            {
+                personalityQuestion3 = "";
+            }
 
             try
             {
