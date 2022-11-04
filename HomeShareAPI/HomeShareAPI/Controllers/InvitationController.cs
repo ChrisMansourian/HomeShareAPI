@@ -67,9 +67,11 @@ namespace HomeShareAPI.Controllers
             int ownerId = int.Parse(reader["USERID"].ToString());
             double distance = double.Parse(reader["DistanceToCampus"].ToString());
             string date = reader["DOD"].ToString();
+            int bath = int.Parse(reader["Bathrooms"].ToString());
+            int beds = int.Parse(reader["Bedrooms"].ToString());
             List<string> splitQuestions = reader["InvitationQuestions"].ToString().Split(",").ToList();
             PropertyUtilities utilities = new PropertyUtilities(pool, ac, laundry, dishwasher, balcony, fireplace);
-            Property property = new Property(propertyID, streetAddress1, streetAddress2, city, state, country, rent, maxCap, squareFeet, distance, utilities);
+            Property property = new Property(propertyID, streetAddress1, streetAddress2, city, state, country, rent, maxCap, squareFeet, distance, utilities, bath, beds);
             Invitation invitation = new Invitation(postId, ownerId, property, date, numOfRoomates, splitQuestions);
 
             return invitation;
