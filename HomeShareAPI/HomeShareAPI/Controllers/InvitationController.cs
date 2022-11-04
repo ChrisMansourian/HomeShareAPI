@@ -229,7 +229,7 @@ namespace HomeShareAPI.Controllers
                 }
                 return false;
             }
-            catch
+            catch (Exception e)
             {
                 Debug.WriteLine("failed creating invitation");
                 return false;
@@ -356,9 +356,16 @@ namespace HomeShareAPI.Controllers
         [HttpGet("DeleteRoomates")]
         public bool DeleteRoomates(int propertyId)
         {
-            SqlCommand com = new SqlCommand("DELETE FROM RoomateTable Where PROPERTYID = @PropertyId");
-            com.Parameters.AddWithValue("@PropertyId", propertyId);
-            com.ExecuteNonQuery();
+            using (var conn = new SqlConnection(connectionString))
+            using (var command = new SqlCommand("DELETE FROM RoomateTable Where PROPERTYID = @PropertyId", conn)
+            {
+                CommandType = CommandType.Text
+            })
+            {
+                conn.Open();
+                command.Parameters.AddWithValue("@PropertyId", propertyId);
+                command.ExecuteNonQuery();
+            }
             return true;
         }
 
