@@ -25,5 +25,9 @@
 
         public Property property { get; set; }
 
+        public List<User> roomates { get; set; }
+
+        public List<Responses> responses { get; set; }
+
     }
 }

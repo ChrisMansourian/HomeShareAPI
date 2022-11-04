@@ -45,6 +45,350 @@ namespace HomeShareAPI.Controllers
             }
         }
 
+        [HttpGet("GetInvitationForPosterFromID")]
+        public Invitation GetPostsFromID(int userId)
+        {
+            try
+            {
+                Invitation i = null;
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_getPost", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("currentDate", DateTime.Now.Date);
+                    command.Parameters.AddWithValue("userId", userId);
+                    conn.Open();
+                    var reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        i = GetInvitationFromReader(reader);
+
+                        i.responses = GetResponses(i.postId);
+                        i.roomates = GetRoomates(i.postId);
+                    }
+
+                }
+                return i;
+            }
+            catch
+            {
+                Debug.WriteLine("failed getting post");
+                return null;
+            }
+        }
+
+        [HttpGet("GetResponses")]
+        public List<Responses> GetResponses(int postId)
+        {
+            try
+            {
+                List<Responses> list = new List<Responses>();
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_getResponses", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("postId", postId);
+                    conn.Open();
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        int userId = int.Parse(reader["USERID"].ToString());
+                        List<string> qR = GetQuestionResponses(userId, postId);
+                        User u = new LoginController().GetUser(userId);
+                        list.Add(new Responses() { questionResponses = qR, user = u });
+                    }
+
+                }
+                return list;
+            }
+            catch
+            {
+                Debug.WriteLine("failed getting responses");
+                return null;
+            }
+        }
+
+        [HttpGet("GetUserQuestionResponses")]
+        public List<string> GetQuestionResponses(int userId, int postId)
+        {
+            try
+            {
+                List<string> list = new List<string>();
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_getQuestionResponses", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("postId", postId);
+                    command.Parameters.AddWithValue("userId", userId);
+                    conn.Open();
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        string response = reader["QuestionsResponse"].ToString();
+                        list.Add(response);
+                    }
+
+                }
+                return list;
+            }
+            catch
+            {
+                Debug.WriteLine("failed getting question responses");
+                return null;
+            }
+        }
+
+        [HttpGet("GetRoomates")]
+        public List<User> GetRoomates(int postId)
+        {
+            try
+            {
+                List<User> list = new List<User>();
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_getCurrentRoomates", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("postId", postId);
+                    conn.Open();
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        int userId = int.Parse(reader["USERID"].ToString());
+                        User u = new LoginController().GetUser(userId);
+                        list.Add(u);
+                    }
+
+                }
+                return list;
+            }
+            catch
+            {
+                Debug.WriteLine("failed getting roommates");
+                return null;
+            }
+        }
+
+        [HttpPost("CreateNewInvitation")]
+        public bool CreateNewInvitation([FromBody]Invitation invitation)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_createPost", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("userId", invitation.userId);
+                    command.Parameters.AddWithValue("streetAddress1", invitation.property.streetAddress1);
+                    command.Parameters.AddWithValue("streetAddress2", invitation.property.streetAddress2);
+                    command.Parameters.AddWithValue("city", invitation.property.city);
+                    command.Parameters.AddWithValue("state", invitation.property.state);
+                    command.Parameters.AddWithValue("country", invitation.property.country);
+                    command.Parameters.AddWithValue("squarefeet", invitation.property.squareFeet);
+                    command.Parameters.AddWithValue("distanceToCampus", invitation.property.distanceToCampus);
+                    command.Parameters.AddWithValue("DOD", DateTime.Parse(invitation.dateOfDeadline));
+                    command.Parameters.AddWithValue("maximumCapacity", invitation.property.maximumCapacity);
+                    command.Parameters.AddWithValue("rent", invitation.property.rent);
+                    command.Parameters.AddWithValue("pool", invitation.property.utilities.pool);
+                    command.Parameters.AddWithValue("ac", invitation.property.utilities.ac);
+                    command.Parameters.AddWithValue("laundry", invitation.property.utilities.laundry);
+                    command.Parameters.AddWithValue("dishwasher", invitation.property.utilities.dishwasher);
+                    command.Parameters.AddWithValue("balcony", invitation.property.utilities.balcony);
+                    command.Parameters.AddWithValue("fireplace", invitation.property.utilities.fireplace);
+                    command.Parameters.AddWithValue("bedrooms", invitation.property.bedrooms);
+                    command.Parameters.AddWithValue("bathrooms", invitation.property.bathrooms);
+                    conn.Open();
+                    var reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        int created = int.Parse(reader["created"].ToString());
+                        if (created == 1)
+                        {
+                            int postId = int.Parse(reader["result"].ToString());
+
+                            AddQuestions(postId, invitation.Questions);
+
+                            return true;
+                        }
+                    }
+
+                }
+                return false;
+            }
+            catch
+            {
+                Debug.WriteLine("failed creating invitation");
+                return false;
+            }
+        }
+
+
+        [HttpGet("ManageResponse")]
+        public bool ManageResponse(int postId, int userId, int posterResponse)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_managePostResponse", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("postId", postId);
+                    command.Parameters.AddWithValue("userId", userId);
+                    command.Parameters.AddWithValue("posterResponse", posterResponse);
+                    conn.Open();
+                    command.ExecuteNonQuery();
+
+                }
+                return true;
+            }
+            catch
+            {
+                Debug.WriteLine("failed managing response");
+                return false;
+            }
+        }
+
+        [HttpPost("AddResponse")]
+        public bool AddResponse(int postId, int userId, int response, [FromBody] List<string> responses)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_addResponse", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("postId", postId);
+                    command.Parameters.AddWithValue("userId", userId);
+                    command.Parameters.AddWithValue("response", response);
+                    conn.Open();
+                    command.ExecuteNonQuery();
+
+                    AddQuestionResponses(postId, userId, responses);
+                    new NotificationController().CreateNotification(userId, postId, "You have one response from user " + new LoginController().GetUser(userId).UserName + "!");
+
+                }
+                return true;
+            }
+            catch
+            {
+                Debug.WriteLine("failed responding to invitation");
+                return false;
+            }
+        }
+
+        [HttpPost("AddQuestions")]
+        public bool AddQuestions(int postId, [FromBody]List<string> questions)
+        {
+            for (int i = 0; i < questions.Count; i++)
+            {
+                try
+                {
+                    using (var conn = new SqlConnection(connectionString))
+                    using (var command = new SqlCommand("usp_addQuestion", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    })
+                    {
+                        command.Parameters.AddWithValue("postId", postId);
+                        command.Parameters.AddWithValue("questionNumber", i + 1);
+                        command.Parameters.AddWithValue("question", questions[i]);
+                        conn.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch
+                {
+                    Debug.WriteLine("failed adding questions");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        [HttpPost("AddQuestionResponses")]
+        public bool AddQuestionResponses(int postId, int userId, [FromBody] List<string> questionResponse)
+        {
+            for (int i = 0; i < questionResponse.Count; i++)
+            {
+                try
+                {
+                    using (var conn = new SqlConnection(connectionString))
+                    using (var command = new SqlCommand("usp_addQuestionResponse", conn)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    })
+                    {
+                        command.Parameters.AddWithValue("postId", postId);
+                        command.Parameters.AddWithValue("questionNumber", i + 1);
+                        command.Parameters.AddWithValue("userId", userId);
+                        command.Parameters.AddWithValue("questionResponse", questionResponse[i]);
+                        conn.Open();
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch
+                {
+                    Debug.WriteLine("failed adding questions responses");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        [HttpGet("DeleteRoomates")]
+        public bool DeleteRoomates(int propertyId)
+        {
+            SqlCommand com = new SqlCommand("DELETE FROM RoomateTable Where PROPERTYID = @PropertyId");
+            com.Parameters.AddWithValue("@PropertyId", propertyId);
+            com.ExecuteNonQuery();
+            return true;
+        }
+
+
+
+        [HttpGet("DeletePost")]
+        public bool DeletePost(int postId)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_deletePost", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("postId", postId);
+                    conn.Open();
+
+                    command.ExecuteNonQuery();
+                }
+                return true;
+            }
+            catch
+            {
+                Debug.WriteLine("failed to delete post");
+                return false;
+            }
+        }
+
         private static Invitation GetInvitationFromReader(SqlDataReader reader)
         {
             int postId = int.Parse(reader["POSTID"].ToString());
