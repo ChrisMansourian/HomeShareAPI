@@ -7,7 +7,7 @@
 
         }
 
-        public Property(int propertyID, string streetAddress1, string streetAddress2, string city, string state, string country, int rent, int maximumCapacity, int squareFeet, double distanceToCampus, PropertyUtilities utilities, int bathrooms, int bedrooms)
+        public Property(int propertyID, string streetAddress1, string streetAddress2, string city, string state, string country, int rent, int maximumCapacity, int squareFeet, double distanceToCampus, PropertyUtilities utilities, double bathrooms, int bedrooms)
         {
             this.propertyID = propertyID;
             this.streetAddress1 = streetAddress1;
@@ -35,7 +35,7 @@
         public int maximumCapacity { get; set; }
         public int squareFeet { get; set; }
         public double distanceToCampus { get; set; }
-        public int bathrooms { get; set; }
+        public double bathrooms { get; set; }
         public int bedrooms { get; set; }
         public PropertyUtilities utilities { get; set; }
     }
