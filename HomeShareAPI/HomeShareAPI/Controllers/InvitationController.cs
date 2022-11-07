@@ -337,14 +337,14 @@ namespace HomeShareAPI.Controllers
                     })
                     {
                         command.Parameters.AddWithValue("postId", postId);
-                        command.Parameters.AddWithValue("questionNumber", i + 1);
+                        command.Parameters.AddWithValue("questionNum", i + 1);
                         command.Parameters.AddWithValue("userId", userId);
                         command.Parameters.AddWithValue("questionResponse", questionResponse[i]);
                         conn.Open();
                         command.ExecuteNonQuery();
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     Debug.WriteLine("failed adding questions responses");
                     return false;
