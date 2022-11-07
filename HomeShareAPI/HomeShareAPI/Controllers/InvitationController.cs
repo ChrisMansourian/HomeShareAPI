@@ -450,7 +450,7 @@ namespace HomeShareAPI.Controllers
             int ownerId = int.Parse(reader["USERID"].ToString());
             double distance = double.Parse(reader["DistanceToCampus"].ToString());
             string date = reader["DOD"].ToString();
-            int bath = int.Parse(reader["Bathrooms"].ToString());
+            double bath = double.Parse(reader["Bathrooms"].ToString());
             int beds = int.Parse(reader["Bedrooms"].ToString());
             List<string> splitQuestions = reader["InvitationQuestions"].ToString().Split(",").ToList();
             PropertyUtilities utilities = new PropertyUtilities(pool, ac, laundry, dishwasher, balcony, fireplace);
