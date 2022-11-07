@@ -80,6 +80,36 @@ namespace HomeShareAPI.Controllers
             }
         }
 
+        [HttpGet("GetPostOwner")]
+        public int GetPostOwner(int postId)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                using (var command = new SqlCommand("usp_getUserFromPost", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    command.Parameters.AddWithValue("postId", postId);
+                    conn.Open();
+                    var reader = command.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        return int.Parse(reader["USERID"].ToString());
+                    }
+
+                }
+                return -1;
+            }
+            catch
+            {
+                Debug.WriteLine("failed getting post owner");
+                return 0;
+            }
+        }
+
         [HttpGet("GetResponses")]
         public List<Responses> GetResponses(int postId)
         {
@@ -282,7 +312,9 @@ namespace HomeShareAPI.Controllers
                     command.ExecuteNonQuery();
 
                     AddQuestionResponses(postId, userId, responses);
-                    new NotificationController().CreateNotification(userId, postId, "You have one response from user " + new LoginController().GetUser(userId).UserName + "!");
+
+                    int ownerId = GetPostOwner(postId);
+                    new NotificationController().CreateNotification(ownerId, postId, "You have one response from user " + new LoginController().GetUser(ownerId).UserName + "!");
 
                 }
                 return true;
