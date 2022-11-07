@@ -223,7 +223,7 @@ namespace HomeShareAPI.Controllers
                 {
                     command.Parameters.AddWithValue("userId", invitation.userId);
                     command.Parameters.AddWithValue("streetAddress1", invitation.property.streetAddress1);
-                    command.Parameters.AddWithValue("streetAddress2", invitation.property.streetAddress2);
+                    command.Parameters.AddWithValue("streetAddress2", invitation.property.streetAddress2 == null ? "" : invitation.property.streetAddress2);
                     command.Parameters.AddWithValue("city", invitation.property.city);
                     command.Parameters.AddWithValue("state", invitation.property.state);
                     command.Parameters.AddWithValue("country", invitation.property.country);
