@@ -314,7 +314,7 @@ namespace HomeShareAPI.Controllers
                     AddQuestionResponses(postId, userId, responses);
 
                     int ownerId = GetPostOwner(postId);
-                    new NotificationController().CreateNotification(ownerId, postId, "You have one response from user " + new LoginController().GetUser(ownerId).UserName + "!");
+                    new NotificationController().CreateNotification(ownerId, postId, "You have one response from user " + new LoginController().GetUser(userId).UserName + "!");
 
                 }
                 return true;
